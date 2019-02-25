@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import MainStage from './components/MainStage';
+import PhaserMain from './components/PhaserMain';
 
 
 export default class App extends Component {
   render() {
     return (
       <div>
-      <MainStage/>
+        <PhaserMain />
       </div>
     );
   }

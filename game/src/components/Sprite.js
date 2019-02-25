@@ -9,14 +9,15 @@ const SpriteStyled=styled.div`
     position: relative;
     left: ${props=> `${props.props.xLocation}px`};
     top: ${props=> `${props.props.yLocation}px`}; 
+
 `;
 
 export default class Sprite extends Component {
-      render() {console.log("props", this.props.xLocation)
+      render() {
           return (
               <SpriteStyled
                 props={this.props}
-
+                gravity={this.props.gravity}
               ></SpriteStyled>
           )
       }
