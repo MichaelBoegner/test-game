@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import Phaser from 'phaser';
 import Portfolio from '../assets/Portfolio.JPG';
 import Ground from '../assets/ground.JPG';
-import Dude from '../assets/dude.JPG';
+import DudeSpriter from '../assets/dude.PNG';
+
 
 export default class PhaserMain extends Component {
 
@@ -33,7 +34,7 @@ export default class PhaserMain extends Component {
         {
             this.load.image('portfolio', Portfolio);
             this.load.image('ground', Ground);
-            this.load.spritesheet('dude', Dude,  { frameWidth: 32, frameHeight: 48 });
+            this.load.spritesheet('dude', DudeSpriter,  { frameWidth: 128, frameHeight: 128 });
         }
         
         
@@ -49,7 +50,7 @@ export default class PhaserMain extends Component {
             platforms.create(0, 750, 'ground');
             platforms.create(950, 220, 'ground');
 
-            this.player = this.physics.add.sprite(100, 450, 'dude');
+            this.player = this.physics.add.sprite(100, 450, 'dude').setScale(.5);
 
             this.player.setBounce(0.2);
             this.player.setCollideWorldBounds(true);
@@ -103,7 +104,7 @@ export default class PhaserMain extends Component {
     
             if (this.cursors.up.isDown && this.player.body.touching.down) {
                 
-                this.player.setVelocityY(-330);
+                this.player.setVelocityY(-200);
             }            
         }
     }
