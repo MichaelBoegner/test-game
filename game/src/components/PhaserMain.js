@@ -4,6 +4,8 @@ import Portfolio from '../assets/Portfolio.JPG';
 import Ground from '../assets/ground.JPG';
 import DudeSpriter from '../assets/dude.PNG';
 import ParagraphGround from '../assets/paragraphGround.JPG';
+import Theme from '../assets/gametheme.MP3';
+import Boing from '../assets/boing.MP3';
 
 
 export default class PhaserMain extends Component {
@@ -37,6 +39,8 @@ export default class PhaserMain extends Component {
             this.load.image('ground', Ground);
             this.load.image('paragraphGround', ParagraphGround);
             this.load.spritesheet('dude', DudeSpriter,  { frameWidth: 113, frameHeight: 110, });
+            this.load.audio('theme', Theme);
+            this.load.audio('boing', Boing);
         }
         
         
@@ -82,6 +86,12 @@ export default class PhaserMain extends Component {
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
+        this.themeMusic = this.sound.add('theme');
+
+        this.themeMusic.play();
+
+        this.boing = this.sound.add('boing');
+        
     }
         
         
@@ -107,8 +117,11 @@ export default class PhaserMain extends Component {
     
             if (this.cursors.up.isDown && this.player.body.touching.down) {
                 
+                this.boing.play();
                 this.player.setVelocityY(-325);
-            }            
+            }
+
+            
         }
     }
 
