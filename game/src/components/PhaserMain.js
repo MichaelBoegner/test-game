@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import Portfolio from '../assets/Portfolio.JPG';
 import Ground from '../assets/ground.JPG';
 import DudeSpriter from '../assets/dude.PNG';
+import ParagraphGround from '../assets/paragraphGround.JPG';
 
 
 export default class PhaserMain extends Component {
@@ -10,8 +11,8 @@ export default class PhaserMain extends Component {
     componentDidMount() {
         let config = {
             type: Phaser.AUTO,
-            width: 2000,
-            height: 1000,
+            width: "100vw",
+            height: "100vh",
             physics: {
                 default: 'arcade',
                 arcade: {
@@ -34,7 +35,8 @@ export default class PhaserMain extends Component {
         {
             this.load.image('portfolio', Portfolio);
             this.load.image('ground', Ground);
-            this.load.spritesheet('dude', DudeSpriter,  { frameWidth: 128, frameHeight: 128 });
+            this.load.image('paragraphGround', ParagraphGround);
+            this.load.spritesheet('dude', DudeSpriter,  { frameWidth: 113, frameHeight: 110, });
         }
         
         
@@ -42,36 +44,37 @@ export default class PhaserMain extends Component {
         {
             this.add.image(0, 0, 'portfolio').setOrigin(0, 0);
 
+            
+            // =============== PLATFORMS ===============//
+
             let platforms = this.physics.add.staticGroup();
 
-            platforms.create(450, 1000, 'ground').setScale(2).refreshBody();
-        
-            platforms.create(1600, 400, 'ground');
-            platforms.create(0, 750, 'ground');
-            platforms.create(950, 220, 'ground');
+            platforms.create(450, 397, 'ground').setScale(7.47, 1).refreshBody();
+            platforms.create(960, 265, 'paragraphGround')
 
-            this.player = this.physics.add.sprite(100, 450, 'dude').setScale(.5);
+            // =============== PLAYER ===============//
+            this.player = this.physics.add.sprite(1800, 175, 'dude').setScale(.5)
 
-            this.player.setBounce(0.2);
+            this.player.setBounce(0.15);
             this.player.setCollideWorldBounds(true);
             
             this.anims.create({
                 key: 'left',
                 frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-                frameRate: 10,
+                frameRate: 7,
                 repeat: -1
             });
             
             this.anims.create({
                 key: 'turn',
                 frames: [ { key: 'dude', frame: 4 } ],
-                frameRate: 20
+                frameRate: 7
             });
             
             this.anims.create({
                 key: 'right',
                 frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-                frameRate: 10,
+                frameRate: 7,
                 repeat: -1
             });
 
@@ -87,13 +90,13 @@ export default class PhaserMain extends Component {
            
             if (this.cursors.left.isDown) {
 
-                this.player.setVelocityX(-160);
+                this.player.setVelocityX(-140);
                 
                 this.player.anims.play('left', true);
             
             } else if (this.cursors.right.isDown) {
 
-                this.player.setVelocityX(160);
+                this.player.setVelocityX(140);
     
                 this.player.anims.play('right', true);
             } else {
@@ -104,7 +107,7 @@ export default class PhaserMain extends Component {
     
             if (this.cursors.up.isDown && this.player.body.touching.down) {
                 
-                this.player.setVelocityY(-200);
+                this.player.setVelocityY(-325);
             }            
         }
     }
