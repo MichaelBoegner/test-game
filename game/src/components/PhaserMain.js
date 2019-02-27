@@ -41,21 +41,16 @@ export default class PhaserMain extends Component {
             this.load.image('ship', Ship);
             this.load.spritesheet('dude', DudeSpriter,  { frameWidth: 113, frameHeight: 110, });
             this.load.audio('theme', Theme);
-            this.load.audio('boing', Boing);
+
         }
         
         
         function create ()
         {
             
-            // let width = window.innerWidth; 
-            // let height = window.innerHeight;
-            
-            // width = width/1920; 
+
                 
             let image = this.add.image(0, 0, 'portfolio').setOrigin(0, 0)
-            // image.setScale(width, 1);
-
             // =============== PLATFORMS ===============//
 
             let platforms = this.physics.add.staticGroup();
@@ -63,7 +58,7 @@ export default class PhaserMain extends Component {
             platforms.create(450, 397, 'ground').setScale(7.47, 1).refreshBody();
             platforms.create(960, 265, 'paragraphGround');
 
-            // =============== PLAYER ===============//
+            // =============== PLAYER AND SHIP SPRITES ===============//
             this.ship = this.physics.add.sprite(1700, 50, 'ship').setScale(.15);
             this.ship.setCollideWorldBounds(true)
 
@@ -97,20 +92,10 @@ export default class PhaserMain extends Component {
 
 
 
-            
-
             this.physics.add.collider(this.player, platforms);
             this.physics.add.collider(this.ship, platforms);
 
         this.cursors = this.input.keyboard.createCursorKeys();
-
-        
-        this.themeMusic = this.sound.add('theme');
-
-        this.themeMusic.play();
-
-        this.boing = this.sound.add('boing');
-        
     }
         
         
@@ -118,19 +103,15 @@ export default class PhaserMain extends Component {
         {   
            
             if (this.cursors.left.isDown) {
-
                 this.player.setVelocityX(-140);
-                
                 this.player.anims.play('left', true);
             
             } else if (this.cursors.right.isDown) {
-
                 this.player.setVelocityX(140);
-    
                 this.player.anims.play('right', true);
+
             } else {
                 this.player.setVelocityX(0);
-    
                 this.player.anims.play('turn');
             }
     
@@ -140,12 +121,15 @@ export default class PhaserMain extends Component {
 
             if(this.cursors.space.isDown && (this.ship.x - this.player.x) > -50 && (this.ship.x - this.player.x) < 50 ) {
                 this.player.isCropped = true;
-            } 
+            }
 
             if(this.player.isCropped === true) {
                 if (this.cursors.left.isDown) {
                     this.ship.setVelocityX(-140);
                     this.ship.setVelocityY(0);
+                    // this.ship.flipX = true;
+
+                    this.ship.setRotation(-1.5708);
 
                     this.player.setVelocityX(-140);
                     this.player.setVelocityY(0);
@@ -153,6 +137,7 @@ export default class PhaserMain extends Component {
                 } else if (this.cursors.right.isDown) {
                     this.ship.setVelocityX(140);
                     this.ship.setVelocityY(0);
+                    this.ship.setRotation(1.5708);
 
                     this.player.setVelocityX(140);
                     this.player.setVelocityY(0);
@@ -161,15 +146,20 @@ export default class PhaserMain extends Component {
                 if (this.cursors.up.isDown) {
                     this.ship.setVelocityY(-140);
                     this.player.setVelocityY(-140);
+                    
 
                 } else if (this.cursors.down.isDown) {
                     this.ship.setVelocityY(140);
+                    this.ship.setRotation(3.14159);
+
                     this.player.setVelocityY(140);
                 } 
                 
                 if(!this.cursors.left.isDown && !this.cursors.right.isDown && !this.cursors.up.isDown && !this.cursors.down.isDown) {
                     this.ship.setVelocityX(0);
                     this.ship.setVelocityY(0);
+                    this.ship.setRotation(0)
+
 
                     this.player.setVelocityX(0);
                     this.player.setVelocityY(0);
@@ -179,13 +169,10 @@ export default class PhaserMain extends Component {
             if(this.cursors.shift.isDown && this.player.isCropped === true) {
                 this.player.isCropped = false;
             }
-            
         }
     }
 
     render() {
-       
-        console.log("WIDTH", window.getUserMedia)
         return (
             <div></div>
         )
