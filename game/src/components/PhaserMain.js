@@ -6,6 +6,7 @@ import DudeSpriter from '../assets/dude.PNG';
 import ParagraphGround from '../assets/paragraphGround.JPG';
 import Theme from '../assets/gametheme.MP3';
 import Boing from '../assets/boing.MP3';
+import Ship from '../assets/ship.PNG';
 
 
 export default class PhaserMain extends Component {
@@ -31,13 +32,13 @@ export default class PhaserMain extends Component {
         
 
         let game = new Phaser.Game(config);
-        
 
         function preload ()
         {
             this.load.image('portfolio', Portfolio);
             this.load.image('ground', Ground);
             this.load.image('paragraphGround', ParagraphGround);
+            this.load.image('ship', Ship);
             this.load.spritesheet('dude', DudeSpriter,  { frameWidth: 113, frameHeight: 110, });
             this.load.audio('theme', Theme);
             this.load.audio('boing', Boing);
@@ -46,21 +47,33 @@ export default class PhaserMain extends Component {
         
         function create ()
         {
-            this.add.image(0, 0, 'portfolio').setOrigin(0, 0);
-
             
+            // let width = window.innerWidth; 
+            // let height = window.innerHeight;
+            
+            // width = width/1920; 
+                
+            let image = this.add.image(0, 0, 'portfolio').setOrigin(0, 0)
+            // image.setScale(width, 1);
+
             // =============== PLATFORMS ===============//
 
             let platforms = this.physics.add.staticGroup();
 
             platforms.create(450, 397, 'ground').setScale(7.47, 1).refreshBody();
-            platforms.create(960, 265, 'paragraphGround')
+            platforms.create(960, 265, 'paragraphGround');
 
             // =============== PLAYER ===============//
+            this.ship = this.physics.add.sprite(1700, 50, 'ship').setScale(.15);
+            this.ship.setCollideWorldBounds(true)
+
             this.player = this.physics.add.sprite(1800, 175, 'dude').setScale(.5)
 
             this.player.setBounce(0.15);
-            this.player.setCollideWorldBounds(true);
+            this.player.setCollideWorldBounds(true) 
+            
+
+
             
             this.anims.create({
                 key: 'left',
@@ -82,10 +95,16 @@ export default class PhaserMain extends Component {
                 repeat: -1
             });
 
-            this.physics.add.collider(this.player, platforms)
+
+
+            
+
+            this.physics.add.collider(this.player, platforms);
+            this.physics.add.collider(this.ship, platforms);
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
+        
         this.themeMusic = this.sound.add('theme');
 
         this.themeMusic.play();
@@ -116,16 +135,57 @@ export default class PhaserMain extends Component {
             }
     
             if (this.cursors.up.isDown && this.player.body.touching.down) {
-                
-                this.boing.play();
                 this.player.setVelocityY(-325);
             }
 
+            if(this.cursors.space.isDown && (this.ship.x - this.player.x) > -50 && (this.ship.x - this.player.x) < 50 ) {
+                this.player.isCropped = true;
+            } 
+
+            if(this.player.isCropped === true) {
+                if (this.cursors.left.isDown) {
+                    this.ship.setVelocityX(-140);
+                    this.ship.setVelocityY(0);
+
+                    this.player.setVelocityX(-140);
+                    this.player.setVelocityY(0);
+                
+                } else if (this.cursors.right.isDown) {
+                    this.ship.setVelocityX(140);
+                    this.ship.setVelocityY(0);
+
+                    this.player.setVelocityX(140);
+                    this.player.setVelocityY(0);
+                }
+                
+                if (this.cursors.up.isDown) {
+                    this.ship.setVelocityY(-140);
+                    this.player.setVelocityY(-140);
+
+                } else if (this.cursors.down.isDown) {
+                    this.ship.setVelocityY(140);
+                    this.player.setVelocityY(140);
+                } 
+                
+                if(!this.cursors.left.isDown && !this.cursors.right.isDown && !this.cursors.up.isDown && !this.cursors.down.isDown) {
+                    this.ship.setVelocityX(0);
+                    this.ship.setVelocityY(0);
+
+                    this.player.setVelocityX(0);
+                    this.player.setVelocityY(0);
+                 }
+            }
+
+            if(this.cursors.shift.isDown && this.player.isCropped === true) {
+                this.player.isCropped = false;
+            }
             
         }
     }
 
     render() {
+       
+        console.log("WIDTH", window.getUserMedia)
         return (
             <div></div>
         )

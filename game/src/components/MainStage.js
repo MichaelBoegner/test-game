@@ -1,9 +1,7 @@
 import React, { Component } from 'react'; 
 import styled from 'styled-components';
 import Sprite from './Sprite';
-import Phaser from 'phaser';
-import Portfolio from '../assets/Portfolio.JPG';
-
+import html2canvas from 'html2canvas';
 
 const World=styled.div`
     border: 5px solid grey;
@@ -22,29 +20,17 @@ export default class MainStage extends Component {
         }
     }
 
+    componentDidMount() {
+        let gameimage;
+        html2canvas(document.body, );
+      }
 
 
-
-
-    moveSprite = (e) => {
-        if(e.key === "ArrowRight") {
-            this.setState({xLocation: this.state.xLocation += 10})
-        } else if(e.key === "ArrowDown") {
-            this.setState({yLocation: this.state.yLocation += 10})
-        } else if(e.key === "ArrowLeft") {
-            this.setState({xLocation: this.state.xLocation -= 10})
-        } else if(e.key === "ArrowUp") {
-            this.setState({yLocation: this.state.yLocation -= 100})
-        }         
-    };
 
     
     render() { 
-        console.log("MainStage State", this.state)
         return (
-            <World 
-                tabIndex="0" 
-                onKeyDown={this.moveSprite}>
+            <World >
                 <Sprite
                     {...this.state}
                 />
