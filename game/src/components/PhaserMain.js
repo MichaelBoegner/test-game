@@ -154,8 +154,8 @@ export default class PhaserMain extends Component {
                 this.ship.body.acceleration.x = -1 * this.ship.body.velocity.x;
                 this.player.body.acceleration.x = -1 * this.player.body.velocity.x;                
             } else if(this.ship.body.velocity.x < -10 && this.player.body.velocity.x < -10) {
-                this.ship.body.acceleration.x = this.ship.body.velocity.x;
-                this.player.body.acceleration.x = this.player.body.velocity.x;                
+                this.ship.body.acceleration.x = -1 * this.ship.body.velocity.x;
+                this.player.body.acceleration.x = -1 * this.player.body.velocity.x;                
             } else {
                 this.ship.body.acceleration.x = 0;
                 this.player.body.acceleration.x = 0;
@@ -183,8 +183,9 @@ export default class PhaserMain extends Component {
     
                if(this.cursors.space.isDown && (this.ship.x - this.player.x) > -50 && (this.ship.x - this.player.x) < 50 ) {
                    this.player.isCropped = true;
+                   this.player.setVelocityX(this.ship.body.velocity.x);
+                   this.player.setVelocityY(this.ship.body.velocity.y);
                }
-
 
            } else if(this.player.isCropped === true) {
                 this.playerCollision.overlapOnly = true; 
@@ -216,9 +217,7 @@ export default class PhaserMain extends Component {
                     }
 
                     this.ship.setRotation(-1.5708);
-                }
-                
-                if (this.cursors.right.isDown) {
+                }else if (this.cursors.right.isDown) {
                     this.ship.body.acceleration.x = 250;
                     this.player.body.acceleration.x = 250;
                         
