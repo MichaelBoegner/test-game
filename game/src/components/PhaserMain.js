@@ -11,7 +11,6 @@ import MarqueeInstructions from '../assets/marqueeInstructions.PNG';
 import ShipTheme from '../assets/AMFM2019-02-22-S1-T07-blow it.MP3';
 import DudeTheme from '../assets/pgroove2002-11-20d1t02.MP3';
 
-
 export default class Game extends Component {
 
     componentDidMount() {
@@ -51,14 +50,16 @@ export default class Game extends Component {
             this.load.spritesheet('marqueeInstructions', MarqueeInstructions,  { frameWidth: 662, frameHeight: 360, });
             this.load.audio('shipTheme',  ShipTheme);
             this.load.audio('dudeTheme', DudeTheme);
+            // this.load.audio('laserSound', Boing );
         }
         
         
         function create ()
         {
-            this.add.image(0, 0, 'portfolio').setOrigin(0, 0)
+            this.add.image(0, 0, 'portfolio').setOrigin(0, 0);
             this.shipTheme = this.sound.add('shipTheme', {volume: 0.15});
             this.dudeTheme = this.sound.add('dudeTheme', {volume: 0.15});
+            // this.laserSound = this.sound.add('laserSound', {volume: 1});
 
             // =============== PLATFORMS ===============//
 
@@ -75,14 +76,11 @@ export default class Game extends Component {
             this.marqueeInstructions.body.setAllowGravity(false);
 
             this.ship = this.physics.add.sprite(100, 180, 'ship').setScale(.15);
-            this.ship.setCollideWorldBounds(true)
+            this.ship.setCollideWorldBounds(true);
 
-            this.player = this.physics.add.sprite(100, 340, 'dude').setScale(.5)
+            this.player = this.physics.add.sprite(100, 340, 'dude').setScale(.5);
             this.player.setBounce(0.15);
-            this.player.setCollideWorldBounds(true)
-
-
-
+            this.player.setCollideWorldBounds(true);
 
 
             this.anims.create({
@@ -122,9 +120,6 @@ export default class Game extends Component {
 
             this.playerCollision = this.physics.add.collider(this.player, this.platforms);
             this.shipCollision = this.physics.add.collider(this.ship, this.platforms);
-            // this.laserCollision = this.physics.add.collider(this.laser, this.platforms);
-            // this.physics.world.on('laser', function onColide() { console.log("collision")});
-
 
             this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -280,60 +275,33 @@ export default class Game extends Component {
 
                 
             if(this.cursors.space.isDown) {
-                const counter = () => {
-                    number = number + 1;
-                    return number; 
+                this.laser = this.physics.add.sprite(this.ship.x, this.ship.y, 'laser').setScale();
+                this.laser.body.setAllowGravity(false);
+                this.physics.add.collider(this.laser, this.platforms, laserDestroyer, null, this);
+                
+                                
+                function laserDestroyer (laser, platform=null) {
+                    laser.disableBody(true, true);
                 }
 
-                const count = counter();
-                let id = `laser${count}`; 
-
-
-                this.laser = this.physics.add.sprite(this.ship.x, this.ship.y, 'laser').setScale(.5);
-                this.laser.name = id; 
-                this.laser.body.setAllowGravity(false);
-                this.laser.body.onCollide = true;
-                this.physics.add.collider(this.laser, this.platforms);
-                
                 if(this.ship.body.rotation === 0) {
-                    this.laser.body.velocity.y = -500;
+                    this.laser.body.velocity.y = -5000;
                     this.laser.setRotation(0);
                 } 
                 
                 if(this.ship.body.rotation === 179.99984796050433) {
-                    this.laser.body.velocity.y = 500;
+                    this.laser.body.velocity.y = 5000;
                     this.laser.setRotation(3.14159);
                 } 
                 
                 if(this.ship.body.rotation === -90.00021045914974) {
-                    this.laser.body.velocity.x = -500;
+                    this.laser.body.velocity.x = -5000;
                     this.laser.setRotation(-1.5708);
                 } 
                 
                 if(this.ship.body.rotation === 90.00021045914968) {
-                    this.laser.body.velocity.x = 500;
+                    this.laser.body.velocity.x = 5000;
                     this.laser.setRotation(1.5708);
-                }
-
-                array.push(this.laser);
-
-                
-
-                const laserDestroyer = (array) => {
-                    let removed = array.pop()
-                    if(removed) {
-                        return removed;     
-                    }
-                    return null; 
-                }
-                
-                let newRemove = this.physics.world.on('collide', function () {return laserDestroyer(array)});
-                for(let i = 0; i < newRemove.bodies.entries.length; i++) {
-
-                    if(newRemove.bodies.entries[i].checkCollision.none === true) {
-                        console.log("remove this body")
-                    }
-                    console.log("bodies", newRemove.bodies.entries)
                 }
 
             }
@@ -343,6 +311,9 @@ export default class Game extends Component {
 
     }
 
+
+
+    
 
     }
 
